@@ -16,7 +16,7 @@ The data was downloaded and cleaned by Thomas Mock and Antoine Bichat for [#Tidy
 * Run predict.py,  Output will be generated as export.csv in Temp folder
 
 ### Future Implementation
-Next step will be to try and train the data using other available models.
+Next step will be to try and solve this problem using Time Series Analysis.
 
 
 Would love to hear from you. If you have any feedback or run into issues while running the code feel free to reach out to me.
