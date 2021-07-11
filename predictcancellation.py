@@ -18,12 +18,6 @@ def meal_parser(x):
     else:
         return 'Undefined'
 
-def clean_company(x):
-    try:
-        return 'company_'+x.split()[0]
-    except:
-        return 'company_unknown'
-
 def clean_RSD(x, dt='d'):
     try:
         if dt=='d':
@@ -59,7 +53,7 @@ def LogisticRegressionImpl(X_train, X_test, y_train, y_test):
     print(mean_squared_error(y_test, pred))
 
 def RandomForestClassifierImpl(X_train, X_test, y_train, y_test):
-    rfc = RandomForestClassifier(n_estimators=10)
+    rfc = RandomForestClassifier(n_estimators=1000)
     rfc.fit(X_train, y_train)
     
     # predicting values
@@ -88,7 +82,7 @@ def RandomForestClassifierGridSearchImpl(X_train, X_test, y_train, y_test):
     print(feature_importances[:9])
     
     param_grid = { 
-    'n_estimators': [200, 500],
+    'n_estimators': [1000,2000],
     'max_features': ['auto', 'sqrt', 'log2'],
     'criterion' :['gini', 'entropy']
     }
@@ -120,17 +114,8 @@ def RandomForestClassifierGridSearchImpl(X_train, X_test, y_train, y_test):
     print(mean_squared_error(y_test, pred))
     
 def cleananomalies(filepath='./data/hotel_bookings.csv'):
+
     df = pd.read_csv(filepath, sep=',')
-    
-    print(df["company"].unique()[:20])
-    
-    df["company"] = df["company"].apply(clean_company)
-    
-    print(df["company"].unique()[:20])
-    
-    # df = pd.concat([df, pd.get_dummies(df["company"])], axis=1)
-    
-    df.drop("company", axis=1, inplace=True)
     
     # Cleaning reservation_status_date
     
@@ -177,14 +162,6 @@ def cleananomalies(filepath='./data/hotel_bookings.csv'):
     df = pd.concat([df, pd.get_dummies(df["reservation_status"])], axis=1)
     df.drop("reservation_status", axis=1, inplace=True)
     
-    # Cleaning country
-    
-    country_col = pd.get_dummies(df["country"])
-    country_col_names = ['Country_' + str(con) for con in list(country_col.columns)]
-    country_col.columns = country_col_names
-    
-    # df = pd.concat([df, country_col], axis=1)
-    
     # Cleaning customer_type
     
     # df = pd.concat([df, pd.get_dummies(df["customer_type"])], axis=1)
@@ -220,8 +197,6 @@ def main():
     # X.drop(['is_canceled', 'Check-Out'], axis=1, inplace=True)
     
     print(len(X.columns))
-            
-    
     
     # Diving the dataset into Train-Test Split
     X_train, X_test, y_train, y_test = train_test_split(X, y)
